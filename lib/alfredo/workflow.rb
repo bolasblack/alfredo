@@ -13,15 +13,9 @@ module Alfredo
     alias_method :add, :<<
 
     def to_xml
-      xml = Nokogiri::XML::Builder.new do |xml|
-        xml.items
-      end.doc
-
-      items.each do |item|
-        xml.xpath('/items').first.add_child(item.build_xml)
-      end
-
-      xml.to_s
+      items_elem = REXML::Element.new 'items'
+      @items.each { |item| items_elem.elements << item.build_xml }
+      items_elem.to_s
     end
 
     def output!

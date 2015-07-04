@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'nokogiri'
 
 describe 'Alfredo::Workflow' do
   before do
@@ -11,7 +12,7 @@ describe 'Alfredo::Workflow' do
   describe "#<<" do
     it "should add Alfredo::Item" do
       item = Alfredo::Item.new
-      
+
       @workflow << item
       @workflow.items.should include(item)
     end
@@ -23,7 +24,7 @@ describe 'Alfredo::Workflow' do
       @workflow.items.should_not include(item)
     end
   end
-  
+
   describe "#add" do
     it "should be an alias for <<" do
       @workflow.method(:add).should eq(@workflow.method(:<<))
@@ -44,7 +45,7 @@ describe 'Alfredo::Workflow' do
     end
 
     it "should have an <item> per item in Workflow" do
-      @xml.xpath('/items/item').size.should eq @workflow.items.size 
+      @xml.xpath('/items/item').size.should eq @workflow.items.size
     end
   end
 

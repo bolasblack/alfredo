@@ -1,6 +1,6 @@
 module Alfredo
   class Item
-    attr_accessor :title, :subtitle, :arg, :uid, :icon_path, :icon_type, :type, :valid, :autocomplete
+    attr_accessor :title, :subtitle, :autocomplete, :arg, :valid, :uid, :type, :icon_path, :icon_type
 
     def initialize(attributes = {})
       attributes.each do |attribute,value|
@@ -15,7 +15,7 @@ module Alfredo
     def icon_type
       @icon_type if %w{fileicon filetype}.include? @icon_type
     end
-    
+
     def valid
       if @valid == false
         'no'
@@ -33,22 +33,24 @@ module Alfredo
     end
 
     def build_xml
-      Nokogiri::XML::Builder.new do |xml|
-        xml.item(:arg => arg, :uid => uid, :valid => valid, :autocomplete => autocomplete) {
-          xml.title title
-          xml.subtitle subtitle
-          if icon_path
-            if icon_type
-              xml.icon(:type => icon_type) {
-                xml.text icon_path
-              }
-            else
-              xml.icon icon_path
-            end
-          end
-          xml.type_ type if type
-        }
-      end.doc.children.first
+      item_elem = REXML::Element.new 'item'
+
+      %w{uid valid autocomplete type}.each do |attrName|
+        item_elem.attributes[attrName] = send attrName
+      end
+
+      %w{title subtitle arg}.each do |subtagName|
+        subtag = REXML::Element.new subtagName, item_elem
+        subtag.text = send subtagName
+      end
+
+      if icon_path
+        icon_elem = REXML::Element.new 'icon', item_elem
+        icon_elem.attributes['type'] = icon_type
+        icon_elem.text = icon_path
+      end
+
+      item_elem
     end
   end
 end
