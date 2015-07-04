@@ -23,4 +23,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec", "~> 2.6"
   spec.add_development_dependency 'nokogiri'
   spec.add_development_dependency 'coveralls'
+
+  spec.add_dependency 'plist'
 end

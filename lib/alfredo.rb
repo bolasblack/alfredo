@@ -1,4 +1,5 @@
 require 'rexml/document'
+require 'plist'
 require 'alfredo/workflow'
 require 'alfredo/item'
 require 'alfredo/version'
